@@ -28,13 +28,7 @@ function defaultParameterValue(a, b) {
  Количество переданных аргументов заранее неизвестно
  */
 function returnArgumentsArray() {
-    var result = [];
-
-    for (var i = 0; i < arguments.length; i++) {
-        result.push(arguments[i]);
-    }
-
-    return result;
+    return [].slice.call(arguments);
 }
 
 /*
@@ -55,7 +49,7 @@ function returnFnResult(fn) {
 function returnCounter(number) {
     number = number || 0;
 
-    return function F() {
+    return function() {
         return ++number;
     };
 }
@@ -67,16 +61,10 @@ function returnCounter(number) {
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
  */
 function bindFunction(fn) {
-    // return fn.bind(null, arguments[1], arguments[2]); // совсем примитив, написанный мной
-
-    // найдено в инете: код для любого количества переданных аргументов, но не разобрался полностью, как это работает
-    var fnArgs = [].slice.call(arguments, 1); /* одалживаем slice и выполняем с контекстом arguments,
-                                                 начиная с первого элемента (нулевой элемент -
-                                                 это функция, отсекаем), на выводе получаем массив */
+    var fnArgs = [].slice.call(arguments, 1);
 
     return function() {
-        return fn.apply(this, fnArgs); /* вернули функцию, которая вернет вызов функции-аргумента
-                                          с любым количеством дополнительны аргументов */
+        return fn.apply(this, fnArgs);
     };
 }
 
