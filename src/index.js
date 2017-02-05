@@ -70,12 +70,13 @@ function bindFunction(fn) {
     // return fn.bind(null, arguments[1], arguments[2]); // совсем примитив, написанный мной
 
     // найдено в инете: код для любого количества переданных аргументов, но не разобрался полностью, как это работает
-    var fnArgs = Array.prototype.slice.call(arguments, 1);
+    var fnArgs = [].slice.call(arguments, 1); /* одалживаем slice и выполняем с контекстом arguments,
+                                                 начиная с первого элемента (нулевой элемент -
+                                                 это функция, отсекаем), на выводе получаем массив */
 
     return function() {
-        return fn.apply(this, fnArgs.concat(
-            Array.prototype.slice.call(arguments, 0)
-        ));
+        return fn.apply(this, fnArgs); /* вернули функцию, которая вернет вызов функции-аргумента
+                                          с любым количеством дополнительны аргументов */
     };
 }
 
