@@ -10,6 +10,20 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isAllTrue(array, fn) {
+    if (!(array instanceof Array) || (array.length === 0)) {
+        throw new Error('empty array')
+    }
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function')
+    }
+
+    for (var i in array) {
+        if (!fn(array[i])) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /*
@@ -22,6 +36,20 @@ function isAllTrue(array, fn) {
  Зарпещено использовать встроенные методы для работы с массивами
  */
 function isSomeTrue(array, fn) {
+    if (!(array instanceof Array) || (array.length === 0)) {
+        throw new Error('empty array');
+    }
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    for (var i in array) {
+        if (fn(array[i])) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*
@@ -33,6 +61,21 @@ function isSomeTrue(array, fn) {
  - fn не является функцией (с текстом "fn is not a function")
  */
 function returnBadArguments(fn) {
+    var array = [];
+
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    for (var i = 1; i < arguments.length; i++) {
+        try {
+            fn(arguments[i]);
+        } catch (e) {
+            array.push(arguments[i]);
+        }
+    }
+
+    return array;
 }
 
 /*
@@ -43,7 +86,7 @@ function returnBadArguments(fn) {
 function findError(data1, data2) {
     return (function() {
         for (var i = 0; i < data1.length; i++) {
-            if (data1[i] !== data2[i]) {
+            if ((data1[i] != data2[i]) && !isNaN(data1[i]) && !isNaN(data2[i])) {
                 return false;
             }
         }
@@ -66,7 +109,52 @@ function findError(data1, data2) {
  - number не является числом (с текстом "number is not a number")
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator(number) {
+function calculator(number = 0) {
+    if (typeof number != 'number') {
+        throw new Error('number is not a number');
+    }
+
+    return {
+        sum: function () {
+            for (var i in arguments) {
+                if (arguments.hasOwnProperty(i)) {
+                    number += arguments[i];
+                }
+            }
+
+            return number;
+        },
+        dif: function () {
+            for (var i in arguments) {
+                if (arguments.hasOwnProperty(i)) {
+                    number -= arguments[i];
+                }
+            }
+
+            return number;
+        },
+        div: function () {
+            for (var i in arguments) {
+                if (arguments.hasOwnProperty(i)) {
+                    if (arguments[i] === 0) {
+                        throw new Error('division by 0');
+                    }
+                    number /= arguments[i];
+                }
+            }
+
+            return number;
+        },
+        mul: function () {
+            for (var i in arguments) {
+                if (arguments.hasOwnProperty(i)) {
+                    number *= arguments[i];
+                }
+            }
+
+            return number;
+        }
+    }
 }
 
 export {
