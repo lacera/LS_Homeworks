@@ -11,10 +11,10 @@
  */
 function isAllTrue(array, fn) {
     if (!(array instanceof Array) || (array.length === 0)) {
-        throw new Error('empty array')
+        throw new Error('empty array');
     }
     if (typeof fn !== 'function') {
-        throw new Error('fn is not a function')
+        throw new Error('fn is not a function');
     }
 
     for (var i in array) {
