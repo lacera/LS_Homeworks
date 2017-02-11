@@ -29,7 +29,17 @@ function map(array, fn) {
  Напишите аналог встроенного метода reduce для работы с массивами
  */
 function reduce(array, fn, initial) {
+    var prev = (initial !== "undefined" && !isNaN(initial)) ? initial : array[0];
 
+    for (var i = 0; i < array.length; i++){
+        if (i == 0 && (initial == "undefined" || isNaN(initial))) {
+            ++i;
+        }
+
+        prev = fn(prev, array[i], i, array);
+    }
+
+    return prev;
 }
 
 /*
@@ -38,6 +48,9 @@ function reduce(array, fn, initial) {
  Функция должна удалить указанное свойство из указанного объекта
  */
 function deleteProperty(obj, prop) {
+    if (prop in obj) {
+        delete obj[prop];
+    }
 }
 
 /*
@@ -46,6 +59,7 @@ function deleteProperty(obj, prop) {
  Функция должна проверить существует ли укзаанное свойство в указанном объекте
  */
 function hasProperty(obj, prop) {
+    return (prop in obj);
 }
 
 /*
@@ -53,6 +67,7 @@ function hasProperty(obj, prop) {
  Функция должна получить все перечисляемые свойства объекта и вернуть их в виде массива
  */
 function getEnumProps(obj) {
+    return Object.keys(obj);
 }
 
 /*
@@ -60,6 +75,15 @@ function getEnumProps(obj) {
  Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
  */
 function upperProps(obj) {
+    var resultArray = [];
+
+    for (var prop in obj){
+        if (prop in obj) {
+            resultArray.push(prop.toUpperCase());
+        }
+    }
+
+    return resultArray;
 }
 
 /*
@@ -67,6 +91,7 @@ function upperProps(obj) {
  Напишите аналог встроенного метода slice для работы с массивами
  */
 function slice(array, from, to) {
+    
 }
 
 /*
