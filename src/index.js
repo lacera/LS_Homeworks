@@ -31,7 +31,7 @@ function map(array, fn) {
 function reduce(array, fn, initial) {
     var prev = (initial !== "undefined" && !isNaN(initial)) ? initial : array[0];
 
-    for (var i = 0; i < array.length; i++){
+    for (var i = 0; i < array.length; i++) {
         if (i == 0 && (initial == "undefined" || isNaN(initial))) {
             ++i;
         }
@@ -77,7 +77,7 @@ function getEnumProps(obj) {
 function upperProps(obj) {
     var resultArray = [];
 
-    for (var prop in obj){
+    for (var prop in obj) {
         if (prop in obj) {
             resultArray.push(prop.toUpperCase());
         }
@@ -91,7 +91,35 @@ function upperProps(obj) {
  Напишите аналог встроенного метода slice для работы с массивами
  */
 function slice(array, from, to) {
-    
+    var resultArray = [],
+        begin = from,
+        end = to;
+
+    if (to === undefined || to > array.length - 1) {
+        end = array.length;
+    }
+
+    if (to < 0) {
+        end = array.length + end;
+    }
+
+    if (from === undefined) {
+        begin = 0;
+    }
+
+    if (from < 0) {
+        if (array.length + from > -1) {
+            begin = array.length + from;
+        } else {
+            begin = 0;
+        }
+    }
+
+    for (var i = begin; i < end; i++) {
+        resultArray.push(array[i]);
+    }
+
+    return resultArray;
 }
 
 /*
@@ -100,6 +128,13 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    var squaringHandler = {
+        set: function (obj, prop, value) {
+                return obj[prop] = value * value;
+            }
+        };
+
+    return new Proxy(obj, squaringHandler);
 }
 
 export {
