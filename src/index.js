@@ -5,7 +5,7 @@
  Напишите аналог встроенного метода forEach для работы с массивами
  */
 function forEach(array, fn) {
-    for(var i = 0; i < array.length; i++) {
+    for (var i = 0; i < array.length; i++) {
         fn(array[i], i, array);
     }
 }
@@ -17,7 +17,7 @@ function forEach(array, fn) {
 function map(array, fn) {
     var resultArray = [];
 
-    for(var i = 0; i < array.length; i++) {
+    for (var i = 0; i < array.length; i++) {
         resultArray.push(fn(array[i], i, array));
     }
 
@@ -29,10 +29,10 @@ function map(array, fn) {
  Напишите аналог встроенного метода reduce для работы с массивами
  */
 function reduce(array, fn, initial) {
-    var prev = (initial !== "undefined" && !isNaN(initial)) ? initial : array[0];
+    var prev = (initial !== undefined && !isNaN(initial)) ? initial : array[0];
 
     for (var i = 0; i < array.length; i++) {
-        if (i == 0 && (initial == "undefined" || isNaN(initial))) {
+        if (i == 0 && (initial == undefined || isNaN(initial))) {
             ++i;
         }
 
@@ -130,9 +130,9 @@ function slice(array, from, to) {
 function createProxy(obj) {
     var squaringHandler = {
         set: function (obj, prop, value) {
-                return obj[prop] = value * value;
-            }
-        };
+            return obj[prop] = value * value;
+        }
+    };
 
     return new Proxy(obj, squaringHandler);
 }
