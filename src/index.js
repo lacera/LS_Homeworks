@@ -7,6 +7,11 @@
  * @return {Element}
  */
 function createDivWithText(text) {
+    var el = document.createElement('div')
+
+    el.innerText = text;
+
+    return el;
 }
 
 /**
@@ -16,6 +21,11 @@ function createDivWithText(text) {
  * @return {Element}
  */
 function createAWithHref(hrefValue) {
+    var el = document.createElement('a');
+
+    el.setAttribute('href', hrefValue);
+
+    return el;
 }
 
 /**
@@ -25,6 +35,7 @@ function createAWithHref(hrefValue) {
  * @param {Element} where - куда вставлять
  */
 function prepend(what, where) {
+    where.insertBefore(what, where.firstChild);
 }
 
 /**
@@ -42,6 +53,17 @@ function prepend(what, where) {
  * т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
+    var arrAllPSiblings = [],
+        el = where.firstElementChild;
+
+    while (el) {
+        if (el.nextElementSibling !== null && el.nextElementSibling.nodeName === 'P') {
+            arrAllPSiblings.push(el);
+        }
+        el = el.nextElementSibling;
+    }
+
+    return arrAllPSiblings;
 }
 
 /**
@@ -55,7 +77,7 @@ function findAllPSiblings(where) {
 function findError(where) {
     var result = [];
 
-    for (var child of where.childNodes) {
+    for (var child of where.children) {
         result.push(child.innerText);
     }
 
@@ -76,6 +98,11 @@ function findError(where) {
  * должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+    for (var child of where.childNodes) {
+        if (child.nodeType === 3) {
+            where.removeChild(child);
+        }
+    }
 }
 
 /**
@@ -89,6 +116,15 @@ function deleteTextNodes(where) {
  * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    for (var child of where.childNodes) {
+        if (child.nodeType === 3) {
+            child.remove();
+            deleteTextNodesRecursive(where);
+        }
+        if (child.nodeType === 1) {
+            deleteTextNodesRecursive(child);
+        }
+    }
 }
 
 /**
@@ -114,6 +150,57 @@ function deleteTextNodesRecursive(where) {
  * }
  */
 function collectDOMStat(root) {
+    var stat = {
+        tags: {},
+        classes: {},
+        texts: 0
+    },
+        fromRecursion = {};
+
+    for (var child of root.childNodes) {
+        console.log('Узел для обхода ', child);
+
+        if (child.nodeType === 3) {
+            ++stat.texts;
+            console.log('Текстовый узел ++ ', child);
+        }
+
+        if (child.nodeType === 1) {
+
+            console.log('Имя узла с типом Элемент: ', child.nodeName);
+            if (child.nodeName in stat) {
+                ++stat.tags[child.nodeName];
+                console.log('Увеличили значение свойства: ', child.nodeName);
+            } else {
+                stat.tags[child.nodeName] = 1;
+                console.log('Создали свойство: ', child.nodeName);
+            }
+            console.log('Количество: ', stat.tags[child.nodeName]);
+            console.log('Вход в узел ', child);
+
+            fromRecursion = collectDOMStat(child);
+
+            stat.texts += fromRecursion.texts;
+
+            for (var prop in fromRecursion.tags) {
+                if (prop in stat.tags) {
+                    stat.tags[prop] += fromRecursion.tags[prop];
+                    console.log('Увеличили значение свойства: ', prop);
+                } else {
+                    stat.tags[prop] = fromRecursion.tags[prop];
+                    console.log('Создали свойство из рекурсии: ', prop);
+                }
+            }
+
+            console.log('Статистика из рекурсии: ', fromRecursion);
+
+            console.log('Выход из узла ', child);
+        }
+
+    }
+    console.log('Статистика на вывод: ', stat);
+
+    return stat;
 }
 
 /**
