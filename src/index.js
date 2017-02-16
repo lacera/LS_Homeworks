@@ -158,25 +158,25 @@ function collectDOMStat(root) {
         fromRecursion = {};
 
     for (var child of root.childNodes) {
-        console.log('Узел для обхода ', child);
 
         if (child.nodeType === 3) {
             ++stat.texts;
-            console.log('Текстовый узел ++ ', child);
         }
 
         if (child.nodeType === 1) {
-
-            console.log('Имя узла с типом Элемент: ', child.nodeName);
-            if (child.nodeName in stat) {
+            if (child.nodeName in stat.tags) {
                 ++stat.tags[child.nodeName];
-                console.log('Увеличили значение свойства: ', child.nodeName);
             } else {
                 stat.tags[child.nodeName] = 1;
-                console.log('Создали свойство: ', child.nodeName);
             }
-            console.log('Количество: ', stat.tags[child.nodeName]);
-            console.log('Вход в узел ', child);
+
+            for (var i = 0; i < child.classList.length; i++) {
+                if (child.classList[i] in stat.classes) {
+                    ++stat.classes[child.classList[i]];
+                } else {
+                    stat.classes[child.classList[i]] = 1;
+                }
+            }
 
             fromRecursion = collectDOMStat(child);
 
@@ -185,20 +185,21 @@ function collectDOMStat(root) {
             for (var prop in fromRecursion.tags) {
                 if (prop in stat.tags) {
                     stat.tags[prop] += fromRecursion.tags[prop];
-                    console.log('Увеличили значение свойства: ', prop);
                 } else {
                     stat.tags[prop] = fromRecursion.tags[prop];
-                    console.log('Создали свойство из рекурсии: ', prop);
                 }
             }
 
-            console.log('Статистика из рекурсии: ', fromRecursion);
-
-            console.log('Выход из узла ', child);
+            for (var prop in fromRecursion.classes) {
+                if (prop in stat.classes) {
+                    stat.classes[prop] += fromRecursion.classes[prop];
+                } else {
+                    stat.classes[prop] = fromRecursion.classes[prop];
+                }
+            }
         }
-
+        
     }
-    console.log('Статистика на вывод: ', stat);
 
     return stat;
 }
