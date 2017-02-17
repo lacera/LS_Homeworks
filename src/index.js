@@ -198,7 +198,7 @@ function collectDOMStat(root) {
                 }
             }
         }
-        
+
     }
 
     return stat;
@@ -236,6 +236,29 @@ function collectDOMStat(root) {
  * }
  */
 function observeChildNodes(where, fn) {
+    var info = {};
+
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+
+            if (mutation.removedNodes[0] !== undefined) {
+                info.type = 'remove';
+                info.nodes = Object.values(mutation.removedNodes);
+            }
+
+            if (mutation.addedNodes[0] !== undefined) {
+                info.type = 'insert';
+                info.nodes = Object.values(mutation.addedNodes);
+            }
+
+            fn(info);
+
+        });
+    });
+
+    var config = { childList: true, subtree: true };
+
+    observer.observe(where, config);
 }
 
 export {
