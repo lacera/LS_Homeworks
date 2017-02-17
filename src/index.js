@@ -151,10 +151,10 @@ function deleteTextNodesRecursive(where) {
  */
 function collectDOMStat(root) {
     var stat = {
-        tags: {},
-        classes: {},
-        texts: 0
-    },
+            tags: {},
+            classes: {},
+            texts: 0
+        },
         fromRecursion = {};
 
     for (var child of root.childNodes) {
@@ -190,7 +190,7 @@ function collectDOMStat(root) {
                 }
             }
 
-            for (var prop in fromRecursion.classes) {
+            for (prop in fromRecursion.classes) {
                 if (prop in stat.classes) {
                     stat.classes[prop] += fromRecursion.classes[prop];
                 } else {
