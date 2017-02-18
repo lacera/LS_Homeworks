@@ -43,7 +43,10 @@ function skipDefault(eventName, target) {
  */
 function emulateClick(target) {
     var event = document.createEvent('MouseEvents');
-    event.initMouseEvent('click', true, true, window, 1, screenX, screenY, target.offsetTop + 1, target.offsetLeft + 1, false, false, false, false, 0, null);
+
+    event.initMouseEvent('click', true, true, window, 1, screenX, screenY,
+                         target.offsetTop + 1, target.offsetLeft + 1,
+                         false, false, false, false, 0, null);
     target.dispatchEvent(event);
 }
 
