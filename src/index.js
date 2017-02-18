@@ -42,11 +42,8 @@ function skipDefault(eventName, target) {
  * @param {Element} target - элемент, на который нужно добавить обработчик
  */
 function emulateClick(target) {
-    var event = document.createEvent('MouseEvents');
+    var event = new MouseEvent('click');
 
-    event.initMouseEvent('click', true, true, window, 1, screenX, screenY,
-                         target.offsetTop + 1, target.offsetLeft + 1,
-                         false, false, false, false, 0, null);
     target.dispatchEvent(event);
 }
 
@@ -77,6 +74,12 @@ function delegate(target, fn) {
  * @param {function} fn - обработчик
  */
 function once(target, fn) {
+    function handler () {
+        fn();
+        target.removeEventListener('click', handler);
+    }
+
+    target.addEventListener('click', handler);
 }
 
 export {
