@@ -22,18 +22,19 @@ function delayPromise(seconds) {
 function loadAndSortTowns() {
     let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    // xhr.responseType = 'json';
-    xhr.send();
-    //console.log(xhr.response);
+    return new Promise(function (resolve, reject) {
+        let xhr = new XMLHttpRequest();
 
-    //return new Promise(function (resolve, reject) {
-       xhr.addEventListener('load', function () {
-            console.log(xhr.response);
-            //resolve(Object.values(xhr.response).sort());
-       });
-    //})*/
+        xhr.open('GET', url);
+        xhr.responseType = 'json';
+        xhr.send();
+        xhr.addEventListener('load', function () {
+            resolve(xhr.response.sort((a, b) => {
+                if (a.name > b.name) return 1;
+                if (a.name < b.name) return -1;
+            }));
+        });
+    })
 }
 
 export {

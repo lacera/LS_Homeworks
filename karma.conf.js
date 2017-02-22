@@ -15,6 +15,11 @@ module.exports = function(config) {
         reporters: ['mocha'],
         port: 9876,
         browsers: ['Firefox'],
+        client: {
+            mocha: {
+                timeout : 4000
+            }
+        },
         captureTimeout: 60000,
         singleRun: false,
         plugins: [
