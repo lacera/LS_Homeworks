@@ -7,8 +7,10 @@
  * @return {Promise}
  */
 function delayPromise(seconds) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(() => {resolve();}, seconds * 1000);
+    return new Promise(function (resolve) {
+        setTimeout(() => {
+            resolve();
+        }, seconds * 1000);
     })
 }
 
@@ -22,7 +24,7 @@ function delayPromise(seconds) {
 function loadAndSortTowns() {
     let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
         let xhr = new XMLHttpRequest();
 
         xhr.open('GET', url);
@@ -30,8 +32,12 @@ function loadAndSortTowns() {
         xhr.send();
         xhr.addEventListener('load', function () {
             resolve(xhr.response.sort((a, b) => {
-                if (a.name > b.name) return 1;
-                if (a.name < b.name) return -1;
+                if (a.name > b.name) {
+                    return 1;
+                }
+                if (a.name < b.name) {
+                    return -1;
+                }
             }));
         });
     })

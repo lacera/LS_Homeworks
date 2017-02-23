@@ -53,6 +53,11 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
+    if (full.toLowerCase().indexOf(chunk.toLowerCase()) > -1) {
+        return true;
+    }
+
+    return false;
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
@@ -62,6 +67,16 @@ let filterResult = homeworkContainer.querySelector('#filter-result');
 
 filterInput.addEventListener('keyup', function() {
     let value = this.value.trim();
+
+    filterResult.innerHTML = '';
+
+    loadTowns().then(towns => {
+        for (let key in towns) {
+            if (value && isMatching(towns[key].name, value)) {
+                filterResult.innerHTML += '<p>' + towns[key].name + '</p>';
+            }
+        }
+    });
 });
 
 export {

@@ -1,5 +1,7 @@
 import assert from 'assert';
-import {delayPromise, loadAndSortTowns} from '../src/index';
+import {
+    delayPromise, loadAndSortTowns
+} from '../src/index';
 
 describe('ДЗ 6.1 - Асинхронность и работа с сетью', () => {
     describe('delayPromise', () => {

@@ -14,7 +14,7 @@ module.exports = function(config) {
         },
         reporters: ['mocha'],
         port: 9876,
-        browsers: ['Firefox'],
+        browsers: ['Chrome'],
         client: {
             mocha: {
                 timeout : 4000
@@ -27,6 +27,7 @@ module.exports = function(config) {
             require('karma-webpack'),
             require('karma-mocha-reporter'),
             require('karma-firefox-launcher'),
+            require('karma-chrome-launcher'),
             require('karma-sourcemap-loader')
         ]
     });
