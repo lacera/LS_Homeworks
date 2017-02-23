@@ -65,18 +65,50 @@ let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 
+// добавляем кнопку "Повторить"
+let filterRepeat = document.createElement('button');
+
+filterBlock.appendChild(filterRepeat);
+// прописываем необходимые атрибуты кнопке "Повторить"
+filterRepeat.id = 'filter-repeat';
+filterRepeat.innerText = 'Повторить';
+// изначально скрываем ненужные и показываем нужные элементы
+filterRepeat.style.display = 'none';
+loadingBlock.style.display = 'block';
+filterInput.style.display = 'none';
+
+function loadTownsRepeat(value) {
+    loadTowns().then(towns => {
+        loadingBlock.style.display = 'none';
+        filterInput.style.display = 'block';
+        if (filterRepeat) {
+            filterRepeat.style.display = 'none'
+        }
+        for (let key in towns) {
+            if (value && towns.hasOwnProperty(key) && isMatching(towns[key].name, value)) {
+                filterResult.innerHTML += '<p>' + towns[key].name + '</p>';
+            }
+        }
+    },
+        () => {
+            filterRepeat.style.display = 'block';
+            loadingBlock.style.display = 'block';
+            loadingBlock.innerText = 'Не удалось загрузить города';
+        }
+    );
+}
+
 filterInput.addEventListener('keyup', function() {
     let value = this.value.trim();
 
     filterResult.innerHTML = '';
+    loadTownsRepeat(value);
+});
 
-    loadTowns().then(towns => {
-        for (let key in towns) {
-            if (value && isMatching(towns[key].name, value)) {
-                filterResult.innerHTML += '<p>' + towns[key].name + '</p>';
-            }
-        }
-    });
+// вешаем обработчик на кнопку "Повторить"
+filterRepeat.addEventListener('click', function () {
+    loadingBlock.innerText = 'Загрузка...';
+    loadTownsRepeat('');
 });
 
 export {
