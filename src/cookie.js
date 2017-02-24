@@ -69,17 +69,21 @@ function isMatching(full, chunk) {
 function createCookieTr(name, value) {
     require('./index').createCookie(name, value);
 
+    // после создания куки обновляем таблицу
     cookiesTableRefresh(getCookies(), filterNameInput.value);
 }
 
+// вешаем обработчик на поле поиска по кукам
 filterNameInput.addEventListener('keyup', function() {
     cookiesTableRefresh(getCookies(), filterNameInput.value);
 });
 
+// вешаем обработчик на кнопку добавления куки
 addButton.addEventListener('click', () => {
     createCookieTr(addNameInput.value.trim(), addValueInput.value.trim());
 });
 
+// функция для получения объекта с куками с помощью регулярного выражения
 function getCookies() {
     return document.cookie
         .split('; ')
@@ -92,27 +96,37 @@ function getCookies() {
         }, {});
 }
 
+// функция для обновления таблицы с куками
 function cookiesTableRefresh(allCookies, searchValue) {
     listTable.innerHTML = '';
 
     for (let name in allCookies) {
         if (allCookies.hasOwnProperty(name) &&
             (isMatching(name, searchValue) || isMatching(allCookies[name], searchValue))) {
+
+            // создаем и добавляем строку в таблицу
             let newTr = document.createElement('tr');
             let addedTr = listTable.appendChild(newTr);
 
+            // создаем и добавляем ячейку (столбец) с именем куки в строку
             let newTdName = document.createElement('td');
+
             addedTr.appendChild(newTdName);
             newTdName.innerText = name;
 
+            // создаем и добавляем ячейку (столбец) со значением куки в строку
             let newTdValue = document.createElement('td');
+
             addedTr.appendChild(newTdValue);
             newTdValue.innerText = allCookies[name];
 
+            // создаем и добавляем ячейку (столбец) с кнопкой удаления куки в строку
             let newTdDelete = document.createElement('td');
+
             addedTr.appendChild(newTdDelete);
             newTdDelete.innerHTML = '<button>удалить</button>';
 
+            // сразу вешаем обработчик на кнопку удаления куки
             let deleteButton = newTdDelete.querySelector('button');
 
             deleteButton.addEventListener('click', function () {
